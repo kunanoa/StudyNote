@@ -1,9 +1,9 @@
 class ContainerController < ApplicationController
 
-  # サーバから全てのコンテナIDを取得する。
+  # サーバから全てのコンテナ情報を取得する。
   def index
-    container = Container.new()
-    @all_container = container.all_container_info
+    containers = Container.new()
+    @all_container = containers.all_container_info
   end
 
   # 起動中であれば停止、停止中であれば起動させる。
@@ -36,6 +36,5 @@ class ContainerController < ApplicationController
     params.permit(:status)
   end
 
-  helper_method :output_container_info
 end
 
