@@ -25,7 +25,8 @@
         <td><%= image.created %></td>
         <td><%= image.image_size %></td>
         <td><%= "---" %></td>
-        <td><%= "---" %></td>
+        <td><%= link_to "削除", images_delete_path(id: image.id), 
+        data: { confirm: "#{image.id}（#{image.repository}:#{image.tag}）\nイメージを削除しますか？" } %></td>
       </tr>
     <% end %>
   </tbody>

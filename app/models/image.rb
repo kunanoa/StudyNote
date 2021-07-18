@@ -2,6 +2,9 @@ class Image < ApplicationRecord
 
   attr_accessor :id, :repository, :tag, :created, :image_size
 
+  # バリデーション処理
+  validates :id, length: { is: 12 }
+
   def all_image_info()
     ids = `docker images -q`.chomp!.split("\n")
 
@@ -28,6 +31,16 @@ class Image < ApplicationRecord
     @image_size = image_size[1..(image_size.size)].join(' ')
 
     return @id, @repository, @tag, @created, @image_size
+  end
+
+  # 対象イメージIDと一致するイメージを削除する。
+  def delete_image(id)
+    image_info(id)
+    `docker rmi -f #{id}`
+
+    # 削除に成功したかどうかを確認する。（結果はboolean型で返す）
+    `sleep 1`
+    `(docker images --format "{{.ID}}" | grep #{id})`.chomp.size == 0
   end
 
 end

@@ -57,6 +57,6 @@ class Container < ApplicationRecord
     # 削除に成功したかどうかを確認する。（結果はboolean型で返す）
     `sleep 1`
     `docker ps -aqf "id=#{id}"`.chomp.size == 0
-  end  
+  end
   
 end

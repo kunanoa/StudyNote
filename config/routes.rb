@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'container/delete'
   get 'home/index'
   get 'images/index'
+  get 'images/delete'
   devise_for :users
 
   root 'home#index'
