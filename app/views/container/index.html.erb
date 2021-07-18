@@ -32,8 +32,8 @@
             <td><%= link_to "起動", container_run_path(id: container.id, status: container.status), 
               data: { confirm: "#{container.id}（#{container.name}）\nコンテナを起動しますか？" } %></td>  
           <% end %>
-            <td><%= "---" %>
-              </td>
+            <td><%= link_to "作成", container_new_path(id: container.id, status: container.status), 
+              data: { confirm: "#{container.id}（#{container.name}）\nイメージを作成しますか？" } %></td>  
           <td><%= link_to "削除", container_delete_path(id: container.id, status: container.status), 
               data: { confirm: "#{container.id}（#{container.name}）\nコンテナを削除しますか？" } %></td>
         </tr>

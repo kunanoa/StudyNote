@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
   get 'images/index'
   get 'container/index'
+  get 'container/new'
+  post 'container/create'
   get 'container/run'
   get 'container/delete'
   get 'home/index'
   get 'images/index'
   get 'images/delete'
+
   devise_for :users
 
   root 'home#index'

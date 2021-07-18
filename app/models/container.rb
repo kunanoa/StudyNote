@@ -1,6 +1,6 @@
 class Container < ApplicationRecord
 
-  attr_accessor :id, :name, :status, :port, :image
+  attr_accessor :id, :name, :status, :port, :image, :tag
 
   # バリデーション処理
   validates :id, length: { is: 12 }
@@ -24,6 +24,7 @@ class Container < ApplicationRecord
     @status = `docker ps -af "id=#{id}" --format '{{.Status}}'`.chomp!
     @port = `docker ps -af "id=#{id}" --format '{{.Ports}}'`.chomp!
     @image = `docker ps -af "id=#{id}" --format '{{.Image}}'`.chomp!
+    @tag = "latest"
 
     if @status.include?("Up")
       @status = "稼働中"
@@ -31,7 +32,11 @@ class Container < ApplicationRecord
       @status = "停止"
     end
 
-    return @id, @name, @status, @port, @image
+    return @id, @name, @status, @port, @image, @tag
+  end
+
+  def create_image(id, repository, tag)
+    `docker commit #{id} #{repository}:#{tag}`
   end
 
   # 対象コンテナのステータス情報から、コンテナが起動中か停止中かを判別し、起動/停止させる。

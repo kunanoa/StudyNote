@@ -6,6 +6,25 @@ class ContainerController < ApplicationController
     @all_container = containers.all_container_info
   end
 
+  def new
+    @container = Container.new(id_params.merge(status_params))
+    if @container.valid?
+      @container.container_info(@container.id)
+    else
+      redirect_back(fallback_location: root_path, danger: "処理に失敗しました。")
+    end
+  end
+
+  # ストロングパラメータ対応が必要！！！
+  def create
+    @container = Container.new()
+    if @container.create_image(params[:container][:id], params[:container][:image], params[:container][:tag])
+      redirect_to images_index_path
+    else
+      redirect_back(fallback_location: root_path, danger: "処理に失敗しました。")
+    end
+  end
+
   # 起動中であれば停止、停止中であれば起動させる。
   def run
     @container = Container.new(id_params.merge(status_params))
