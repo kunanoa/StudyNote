@@ -1,0 +1,47 @@
+<h1>ホーム</h1>
+<div class="row">
+  <div class="col-md-6">
+    <%= link_to container_index_path do %>
+      <%= image_tag "cat-4626681_1920.jpg", class: "home_image" %>
+      <div class="text-center home_image_text">
+        コンテナ画面へ移動
+      </div>
+    <% end %>
+  </div>
+  <div class="col-md-6">
+    <%= link_to images_index_path do %>
+      <%= image_tag "cat-4626682_1920.jpg", class: "home_image" %>
+      <div class="text-center home_image_text">
+        イメージ画面へ移動
+      </div>
+    <% end %>
+  </div>
+
+  <div class="col-md-6">
+    <br>
+    <br>
+    <h3>◆今週の進捗状況</h3>
+    <p class="text_size_20">
+    ・ヘッダとレスポンシブ対応＆フッダの追加<br>
+    <br>
+    ・サイト表示遅延問題の解決（ELB設定の見直し）<br>
+    ・コンテナページの処理をControlerとmodelで分割<br>
+    ・ストロングパラメータ＆バリデーション対応<br>
+    ・アラート出力処理導入<br>
+    ・ページビジュアル修正<br>
+    </p>
+  </div>
+
+  <div class="col-md-6">
+    <br>
+    <br>
+    <h3>◆要対応</h3>
+    <p class="text_size_20">
+    ・ログインページ関連ビジュアル<br>
+    ・イメージ管理のページ<br>
+    ・その他<br>
+
+    </p>
+  </div>
+
+</div>

@@ -1,0 +1,45 @@
+<h1>コンテナ管理</h1>
+<div class="row">
+  <div class="col-md-12">
+
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>No</th>    
+        <th>コンテナID</th>
+        <th>コンテナ名</th>
+        <th>ステータス</th>
+        <th>ポート</th>
+        <th>イメージ名</th>
+        <th>起動/停止</th>
+        <th>イメージ作成</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Container.all_container_ids.each_with_index do |container_id, index| %>
+        <% output_container_info(container_id) %>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td><%= @container.id %></td>
+          <td><%= @container.name %></td>
+          <td><%= @container.status %></td>
+          <td><%= @container.port %></td>
+          <td><%= @container.image %></td>
+          <% if @container.status == "稼働中" %>
+            <td><%= link_to "停止", container_run_path(id: @container.id, status: @container.status), 
+              data: { confirm: "#{@container.id}（#{@container.name}）\nコンテナを停止しますか？" } %></td>
+          <% else %>
+            <td><%= link_to "起動", container_run_path(id: @container.id, status: @container.status), 
+              data: { confirm: "#{@container.id}（#{@container.name}）\nコンテナを起動しますか？" } %></td>  
+          <% end %>
+            <td><%= "---" %>
+              </td>
+          <td><%= link_to "削除", container_delete_path(id: @container.id, status: @container.status), 
+              data: { confirm: "#{@container.id}（#{@container.name}）\nコンテナを削除しますか？" } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    </table>
+  </div>
+</div>
