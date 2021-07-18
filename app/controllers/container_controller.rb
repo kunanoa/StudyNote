@@ -2,13 +2,8 @@ class ContainerController < ApplicationController
 
   # サーバから全てのコンテナIDを取得する。
   def index
-    @container = Container.new()
-  end
-
-  # 各種コンテナ情報を取得
-  # プログラムによる代入の箇所であるため、ストロングパラメータは利用していない。
-  def output_container_info(id)
-    @container.container_info(id)
+    container = Container.new()
+    @all_container = container.all_container_info
   end
 
   # 起動中であれば停止、停止中であれば起動させる。

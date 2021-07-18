@@ -6,8 +6,16 @@ class Container < ApplicationRecord
   validates :id, length: { is: 12 }
   validates :status, format: { with: /(稼働中|停止)/ }
   
-  def self.all_container_ids()
-    `docker ps -a --format "{{.ID}}"`.split("\n")
+  def all_container_info()
+    ids = `docker ps -a --format "{{.ID}}"`.chomp!.split("\n")
+
+    all_container = []
+    ids.each do |id|
+      container = Container.new()
+      container.container_info(id)
+      all_container << container
+    end
+    all_container
   end
 
   def container_info(id)

@@ -17,26 +17,25 @@
       </tr>
     </thead>
     <tbody>
-      <% Container.all_container_ids.each_with_index do |container_id, index| %>
-        <% output_container_info(container_id) %>
+      <% @all_container.each_with_index do |container, index| %>
         <tr>
           <td><%= index + 1 %></td>
-          <td><%= @container.id %></td>
-          <td><%= @container.name %></td>
-          <td><%= @container.status %></td>
-          <td><%= @container.port %></td>
-          <td><%= @container.image %></td>
-          <% if @container.status == "稼働中" %>
-            <td><%= link_to "停止", container_run_path(id: @container.id, status: @container.status), 
-              data: { confirm: "#{@container.id}（#{@container.name}）\nコンテナを停止しますか？" } %></td>
+          <td><%= container.id %></td>
+          <td><%= container.name %></td>
+          <td><%= container.status %></td>
+          <td><%= container.port %></td>
+          <td><%= container.image %></td>
+          <% if container.status == "稼働中" %>
+            <td><%= link_to "停止", container_run_path(id: container.id, status: container.status), 
+              data: { confirm: "#{container.id}（#{container.name}）\nコンテナを停止しますか？" } %></td>
           <% else %>
-            <td><%= link_to "起動", container_run_path(id: @container.id, status: @container.status), 
-              data: { confirm: "#{@container.id}（#{@container.name}）\nコンテナを起動しますか？" } %></td>  
+            <td><%= link_to "起動", container_run_path(id: container.id, status: container.status), 
+              data: { confirm: "#{container.id}（#{container.name}）\nコンテナを起動しますか？" } %></td>  
           <% end %>
             <td><%= "---" %>
               </td>
-          <td><%= link_to "削除", container_delete_path(id: @container.id, status: @container.status), 
-              data: { confirm: "#{@container.id}（#{@container.name}）\nコンテナを削除しますか？" } %></td>
+          <td><%= link_to "削除", container_delete_path(id: container.id, status: container.status), 
+              data: { confirm: "#{container.id}（#{container.name}）\nコンテナを削除しますか？" } %></td>
         </tr>
       <% end %>
     </tbody>
