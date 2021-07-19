@@ -5,6 +5,8 @@ class Container < ApplicationRecord
   # バリデーション処理
   validates :id, length: { is: 12 }
   validates :status, format: { with: /(稼働中|停止|)/ }
+  validates :image, length: { maximum: 15 } 
+  validates :tag, length: { maximum: 12 } 
   
   def all_container_info()    
     ids = `docker ps -a --format "{{.ID}}"`.chomp.split("\n")
@@ -65,6 +67,8 @@ class Container < ApplicationRecord
   end
   
   # docker run --name #{name} -d -p #{server-port}:#{container-port} #{repogitory}:#{tag}
+
+  # docker run -d -it ubuntu
 
   # オプション
   # 「-it --rm」

@@ -6,20 +6,20 @@ class ContainerController < ApplicationController
     @all_container = containers.all_container_info
   end
 
+  # イメージ作成のためのフォームページへ遷移。
   def new
     @container = Container.new(id_params)
-    if @container.valid?
-      @container.container_info(@container.id)
+    if @container.valid? && @container.container_info(@container.id)
     else
       redirect_back(fallback_location: root_path, danger: "処理に失敗しました。")
     end
   end
 
-  # ストロングパラメータ対応が必要！！！
+  # 指定した情報からイメージを作成する。
   def create
-    @container = Container.new()
-    if @container.create_image(params[:container][:id], params[:container][:image], params[:container][:tag])
-      redirect_to images_index_path
+    @container = Container.new(create_image_params)
+    if @container.valid? && @container.create_image(@container.id, @container.image, @container.tag)
+      redirect_to images_index_path, success: "イメージを作成しました。"
     else
       redirect_back(fallback_location: root_path, danger: "処理に失敗しました。")
     end
@@ -53,6 +53,10 @@ class ContainerController < ApplicationController
 
   def status_params
     params.permit(:status)
+  end
+
+  def create_image_params
+    params.require(:container).permit(:id, :image, :tag)
   end
 
 end
