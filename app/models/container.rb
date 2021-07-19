@@ -1,11 +1,11 @@
 class Container < ApplicationRecord
 
-  attr_accessor :id, :name, :status, :port, :image, :tag
+  attr_accessor :id, :name, :status, :port, :repository, :tag
 
   # バリデーション処理
   validates :id, length: { is: 12 }
   validates :status, format: { with: /(稼働中|停止|)/ }
-  validates :image, length: { maximum: 15 } 
+  validates :repository, length: { maximum: 15 } 
   validates :tag, length: { maximum: 12 } 
   
   def all_container_info()    
@@ -25,7 +25,7 @@ class Container < ApplicationRecord
     @name = `docker ps -af "id=#{id}" --format '{{.Names}}'`.chomp
     @status = `docker ps -af "id=#{id}" --format '{{.Status}}'`.chomp
     @port = `docker ps -af "id=#{id}" --format '{{.Ports}}'`.chomp
-    @image = `docker ps -af "id=#{id}" --format '{{.Image}}'`.chomp
+    @repository = `docker ps -af "id=#{id}" --format '{{.Image}}'`.chomp
     @tag = "latest"
 
     if @status.include?("Up")
@@ -34,7 +34,7 @@ class Container < ApplicationRecord
       @status = "停止"
     end
 
-    return @id, @name, @status, @port, @image, @tag
+    return @id, @name, @status, @port, @repository, @tag
   end
 
   def create_image(id, repository, tag)

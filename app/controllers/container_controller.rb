@@ -18,7 +18,7 @@ class ContainerController < ApplicationController
   # 指定した情報からイメージを作成する。
   def create
     @container = Container.new(create_image_params)
-    if @container.valid? && @container.create_image(@container.id, @container.image, @container.tag)
+    if @container.valid? && @container.create_image(@container.id, @container.repository, @container.tag)
       redirect_to images_index_path, success: "イメージを作成しました。"
     else
       redirect_back(fallback_location: root_path, danger: "処理に失敗しました。")
@@ -56,7 +56,7 @@ class ContainerController < ApplicationController
   end
 
   def create_image_params
-    params.require(:container).permit(:id, :image, :tag)
+    params.require(:container).permit(:id, :repository, :tag)
   end
 
 end
