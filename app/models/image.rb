@@ -17,17 +17,23 @@ class Image < ApplicationRecord
     all_image
   end
 
-  def image_info(id)
-    repository = `(docker images --format "{{.ID}} {{.Repository}}" | grep "#{id}")`.split(" ")
-    tag = `(docker images --format "{{.ID}} {{.Tag}}" | grep "#{id}")`.split(" ")
-    created = `(docker images --format "{{.ID}} {{.CreatedSince}}" | grep "#{id}")`.split(" ")
-    image_size = `(docker images --format "{{.ID}} {{.Size}}" | grep "#{id}")`.split(" ")
+  def image_info_command_result(id, element)
+    items = `(docker images --format "{{.ID}} {{.#{element}}}" | grep "#{id}")`.split("\n")
+    item = items.map do |item|
+             item if item.split(" ")[0] == "#{id}"
+           end
+    item = item.select { |item| item != nil }
+    item = item[0].split(" ")
+    item = item[1..(item.size)].join(' ')
+  end
 
+  def image_info(id)
+    element = ["Repository", "Tag", "CreatedSince", "Size"]
     @id = id
-    @repository = repository[1..(repository.size)].join(' ')
-    @tag = tag[1..(tag.size)].join(' ')
-    @created = created[1..(created.size)].join(' ')
-    @image_size = image_size[1..(image_size.size)].join(' ')
+    @repository = image_info_command_result(id, element[0])
+    @tag = image_info_command_result(id, element[1])
+    @created = image_info_command_result(id, element[2])
+    @image_size = image_info_command_result(id, element[3])
 
     return @id, @repository, @tag, @created, @image_size
   end
@@ -43,3 +49,13 @@ class Image < ApplicationRecord
   end
 
 end
+
+  # docker run --name #{name} -d -p #{server-port}:#{container-port} #{repogitory}:#{tag}
+
+  # docker run -d -it ubuntu
+
+  # オプション
+  # 「-it --rm」
+  # 「-d」…バックグラウンドで実行
+  # 「-p」…「ホストマシンのポート：コンテナのポート」でポートフォワード（転送）
+  # 「--name」…コンテナに名前をつける
