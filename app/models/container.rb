@@ -4,10 +4,10 @@ class Container < ApplicationRecord
 
   # バリデーション処理
   validates :id, length: { is: 12 }
-  validates :status, format: { with: /(稼働中|停止)/ }
+  validates :status, format: { with: /(稼働中|停止|)/ }
   
-  def all_container_info()
-    ids = `docker ps -a --format "{{.ID}}"`.chomp!.split("\n")
+  def all_container_info()    
+    ids = `docker ps -a --format "{{.ID}}"`.chomp.split("\n")
 
     all_container = []
     ids.each do |id|
@@ -20,10 +20,10 @@ class Container < ApplicationRecord
 
   def container_info(id)
     @id = id
-    @name = `docker ps -af "id=#{id}" --format '{{.Names}}'`.chomp!
-    @status = `docker ps -af "id=#{id}" --format '{{.Status}}'`.chomp!
-    @port = `docker ps -af "id=#{id}" --format '{{.Ports}}'`.chomp!
-    @image = `docker ps -af "id=#{id}" --format '{{.Image}}'`.chomp!
+    @name = `docker ps -af "id=#{id}" --format '{{.Names}}'`.chomp
+    @status = `docker ps -af "id=#{id}" --format '{{.Status}}'`.chomp
+    @port = `docker ps -af "id=#{id}" --format '{{.Ports}}'`.chomp
+    @image = `docker ps -af "id=#{id}" --format '{{.Image}}'`.chomp
     @tag = "latest"
 
     if @status.include?("Up")
@@ -64,4 +64,11 @@ class Container < ApplicationRecord
     `docker ps -aqf "id=#{id}"`.chomp.size == 0
   end
   
+  # docker run --name #{name} -d -p #{server-port}:#{container-port} #{repogitory}:#{tag}
+
+  # オプション
+  # 「-it --rm」
+  # 「-d」…バックグラウンドで実行
+  # 「-p」…「ホストマシンのポート：コンテナのポート」でポートフォワード（転送）
+  # 「--name」…コンテナに名前をつける
 end

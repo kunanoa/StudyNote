@@ -7,7 +7,7 @@ class ContainerController < ApplicationController
   end
 
   def new
-    @container = Container.new(id_params.merge(status_params))
+    @container = Container.new(id_params)
     if @container.valid?
       @container.container_info(@container.id)
     else
@@ -38,7 +38,7 @@ class ContainerController < ApplicationController
   # コンテナを削除する。
   # status_paramsはバリデーションを通すために渡している。
   def delete
-    @container = Container.new(id_params.merge(status_params))
+    @container = Container.new(id_params)
     if @container.valid? && @container.delete_container(@container.id)
       flash.now[:success] = "コンテナの削除に成功しました。"
     else

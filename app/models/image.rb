@@ -6,7 +6,7 @@ class Image < ApplicationRecord
   validates :id, length: { is: 12 }
 
   def all_image_info()
-    ids = `docker images -q`.chomp!.split("\n")
+    ids = `docker images -q`.chomp.split("\n")
 
     all_image = []
     ids.each do |id|
@@ -18,7 +18,6 @@ class Image < ApplicationRecord
   end
 
   def image_info(id)
-
     repository = `(docker images --format "{{.ID}} {{.Repository}}" | grep "#{id}")`.split(" ")
     tag = `(docker images --format "{{.ID}} {{.Tag}}" | grep "#{id}")`.split(" ")
     created = `(docker images --format "{{.ID}} {{.CreatedSince}}" | grep "#{id}")`.split(" ")
