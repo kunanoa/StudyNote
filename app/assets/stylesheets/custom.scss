@@ -45,7 +45,7 @@ html,body{
 }
 
 .footer {
-  height: 60px;
+  height: 120px;
   margin-top: auto;
   background-color: #2f3a44;
   color: #e8e8e8;
@@ -55,9 +55,17 @@ html,body{
   width: 100%;
 }
 
+.footer-left {
+  float: left;
+}
+
 .footer-right {
   float: right;
-  padding-top: 10px;
+  padding-top: 50px;
+}
+
+.footer-left p {
+  margin-bottom: 8px;
 }
 
 .clear {
@@ -74,7 +82,7 @@ html,body{
 .top-hero-wrapper {
   min-height: 100vh;
   position: relative;
-  padding-bottom: 120px;
+  padding-bottom: 180px;
   box-sizing: border-box;  /*←余白を含めてmin-height:100vhに*/
 
   //   background-image: image-url('bg-top.png');
