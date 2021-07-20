@@ -24,7 +24,8 @@
             <td><%= image.created %></td>
             <td><%= image.image_size %></td>
             <td><%= "---" %></td>
-            <td><%= link_to "削除", images_delete_path(id: image.id), 
+            <td><%= link_to "削除", images_delete_path(id: image.id, repository: image.repository, tag: image.tag,
+                                      image_size: image.image_size, created: image.created), 
             data: { confirm: "#{image.id}（#{image.repository}:#{image.tag}）\nイメージを削除しますか？" } %></td>
           </tr>
         <% end %>
@@ -35,6 +36,10 @@
   <div class="col-md-12">
     <p>
     <b>※稼働中のコンテナで利用されているイメージは削除できない場合があります。</b><br>
+    <b>※他のイメージの作成元（親）になっているイメージは削除できない場合があります。</b><br>
+    <b>※上記に該当しないもので、不要なイメージは以下リンクをクリックすることで削除できます。（<none>ついてるもの）</b><br>
+    　<%= link_to "docker image prune -f", images_delete_path, 
+          data: { confirm: "本当に削除しますか？" } %></td>
     </p>
   </div>
 

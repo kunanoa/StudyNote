@@ -3,10 +3,10 @@ class Container < ApplicationRecord
   attr_accessor :id, :name, :status, :port, :repository, :tag
 
   # バリデーション処理
-  validates :id, length: { is: 12 }
+  validates :id, length: { is: 12 }, presence: true
   validates :status, format: { with: /\A(稼働中|停止|)\z/ }
-  validates :repository, length: { maximum: 15 }, format: {with: /\A([A-Za-z0-9._-]+|)\z/}
-  validates :tag, length: { maximum: 12 }, format: {with: /\A([A-Za-z0-9._-]+|)\z/}
+  validates :repository, length: { maximum: 15 }, format: {with: /\A([A-Za-z0-9._-]+)\z/}
+  validates :tag, length: { maximum: 12 }, format: {with: /\A([A-Za-z0-9<>._-]+)\z/}
   
   def all_container_info()    
     ids = `docker ps -a --format "{{.ID}}"`.chomp.split("\n")
@@ -38,7 +38,17 @@ class Container < ApplicationRecord
   end
 
   def create_image(id, repository, tag)
-    `docker commit #{id} #{repository}:#{tag}`
+    if repository == ""
+      result = false
+    elsif tag == ""
+      tag = "latest"
+      `docker commit #{id} #{repository}:#{tag}`
+      result = true
+    else
+      `docker commit #{id} #{repository}:#{tag}`
+      result = true
+    end
+    result
   end
 
   # 対象コンテナのステータス情報から、コンテナが起動中か停止中かを判別し、起動/停止させる。
