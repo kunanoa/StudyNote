@@ -6,6 +6,10 @@ class ImagesController < ApplicationController
     @all_image = images.all_image_info
   end
 
+  def new
+    
+  end
+
   # イメージを削除する。
   def delete
     @image = Image.new(image_params)

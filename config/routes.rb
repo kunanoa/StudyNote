@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'container/delete'
   get 'home/index'
   get 'images/index'
+  get 'images/new'
   get 'images/delete'
   get 'images/delete_2'
 

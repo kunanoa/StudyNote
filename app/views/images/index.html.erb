@@ -23,10 +23,12 @@
             <td><%= image.tag %></td>
             <td><%= image.created %></td>
             <td><%= image.image_size %></td>
-            <td><%= "---" %></td>
+            <td><%= link_to "作成", images_new_path(id: image.id, repository: image.repository, tag: image.tag,
+              image_size: image.image_size, created: image.created), 
+              data: { confirm: "#{image.id}（#{image.repository}:#{image.tag}）\nコンテナを作成しますか？" } %></td>
             <td><%= link_to "削除", images_delete_path(id: image.id, repository: image.repository, tag: image.tag,
-                                      image_size: image.image_size, created: image.created), 
-            data: { confirm: "#{image.id}（#{image.repository}:#{image.tag}）\nイメージを削除しますか？" } %></td>
+              image_size: image.image_size, created: image.created), 
+              data: { confirm: "#{image.id}（#{image.repository}:#{image.tag}）\nイメージを削除しますか？" } %></td>
           </tr>
         <% end %>
       </tbody>
