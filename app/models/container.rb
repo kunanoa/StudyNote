@@ -5,8 +5,8 @@ class Container < ApplicationRecord
   # バリデーション処理
   validates :id, length: { is: 12 }, presence: true
   validates :status, format: { with: /\A(稼働中|停止|)\z/ }
-  validates :repository, length: { maximum: 15 }, format: {with: /\A([A-Za-z0-9._-]+)\z/}
-  validates :tag, length: { maximum: 12 }, format: {with: /\A([A-Za-z0-9<>._-]+)\z/}
+  validates :repository, length: { maximum: 15 }, format: {with: /\A([A-Za-z0-9._-]+|)\z/}
+  validates :tag, length: { maximum: 12 }, format: {with: /\A([A-Za-z0-9<>._-]+|)\z/}
   
   def all_container_info()    
     ids = `docker ps -a --format "{{.ID}}"`.chomp.split("\n")

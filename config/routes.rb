@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'home/index'
   get 'images/index'
   get 'images/delete'
+  get 'images/delete_2'
 
   devise_for :users
 

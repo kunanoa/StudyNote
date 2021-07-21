@@ -33,12 +33,19 @@ class Image < ApplicationRecord
     return @id, @repository, @tag, @created, @image_size
   end
 
-  # 対象イメージIDと一致するイメージを削除する。
+  # 対象イメージを削除する。
   def delete_image(id, repository, tag, image_size, created)
     `docker rmi #{repository}:#{tag}`
     # 削除に成功したかどうかを確認する。（結果はboolean型で返す）
     `sleep 1`
     `(docker images --format "{{.Repository}} {{.Tag}}" | grep "^#{repository} #{tag}$")`.split("\n").size == 0
+  end
+
+  def delete_unused_image()
+    `docker image prune -f`
+    # 削除に成功したかどうかを確認する。（結果はboolean型で返す）
+    `sleep 1`
+    `(docker images --format "{{.Repository}} {{.Tag}}" | grep "<none>")`.split("\n").size == 0
   end
 
 end

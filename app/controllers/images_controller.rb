@@ -16,6 +16,15 @@ class ImagesController < ApplicationController
     end
   end
 
+  def delete_2
+    @image = Image.new()
+    if @image.delete_unused_image
+      redirect_back(fallback_location: root_path, success: "削除可能な不要イメージを削除しました。")
+    else
+      redirect_back(fallback_location: root_path, danger: "イメージの削除に失敗しました。")
+    end
+  end
+
   private
   def image_params
     params.permit(:id, :repository, :tag, :image_size, :created)
