@@ -1,6 +1,6 @@
 class Image < ApplicationRecord
 
-  attr_accessor :id, :repository, :tag, :created, :image_size
+  attr_accessor :id, :repository, :tag, :created, :image_size, :port_host, :port_container
 
   # バリデーション処理
   validates :id, length: { maximum: 12 }, format: {with: /\A([a-z0-9]+|)\z/}
@@ -8,6 +8,8 @@ class Image < ApplicationRecord
   validates :tag, length: { maximum: 12 }, format: {with: /\A([A-Za-z0-9]+[A-Za-z0-9_-]+[A-Za-z0-9]|"<none>")\z/}
   validates :image_size, length: { maximum: 10 }, format: {with: /\A([A-Za-z0-9.]+|)\z/}
   validates :created, length: { maximum: 18 }, format: {with: /\A([A-Za-z0-9 ]+|)\z/}
+  validates :port_host, length: { maximum: 5 }, format: {with: /\A([0-9]*)\z/}
+  validates :port_container, length: { maximum: 5 }, format: {with: /\A([0-9]*)\z/}
 
   def all_image_info()
     count = `docker images -q`.chomp.split("\n").count
@@ -30,7 +32,22 @@ class Image < ApplicationRecord
     @tag = tag
     @created = created
     @image_size = image_size
-    return @id, @repository, @tag, @created, @image_size
+    @port_host = ""
+    @port_container = ""
+    return @id, @repository, @tag, @created, @image_size ,@port_host ,@port_container
+  end
+
+  def create_container(repository, tag, port_host, port_container)
+    if port_host != "" && port_container != ""
+      `docker run -d -it -p #{port_host}:#{port_container} #{repository}:#{tag}`
+      result = true
+    elsif port_host != "" || port_container != ""
+      result = false
+    else
+      `docker run -d -it #{repository}:#{tag}`
+      result = true
+    end
+    result
   end
 
   # 対象イメージを削除する。
@@ -47,19 +64,4 @@ class Image < ApplicationRecord
     `sleep 1`
     `(docker images --format "{{.Repository}} {{.Tag}}" | grep "<none>")`.split("\n").size == 0
   end
-
 end
-
-  # docker run --name #{name} -d -p #{server-port}:#{container-port} #{repogitory}:#{tag}
-  # docker run -d -it ubuntu:latest
-
-  # docker images --format "{{.Repository}} {{.Tag}}" | grep -v "<none>"
-  # docker images --format "{{.ID}} {{.Repository}} {{.Tag}}" | grep -v "<none>" | grep "^#{id}"
-  # docker images --format "{{.ID}} {{.Repository}} {{.Tag}}" | grep -v "<none>" | grep "^33bdf135ecb8"
-  # レポジトリかタグに<noneがついてるものは、作成、削除できなくすること！>
-  
-  # オプション
-  # 「-it --rm」
-  # 「-d」…バックグラウンドで実行
-  # 「-p」…「ホストマシンのポート：コンテナのポート」でポートフォワード（転送）
-  # 「--name」…コンテナに名前をつける
