@@ -7,7 +7,12 @@ class ImagesController < ApplicationController
   end
 
   def new
-    
+    @image = Image.new(image_params_2)
+    if @image.valid? 
+    end
+  end
+
+  def create
   end
 
   # イメージを削除する。
@@ -29,6 +34,10 @@ class ImagesController < ApplicationController
   private
   def image_params
     params.permit(:id, :repository, :tag, :image_size, :created)
+  end
+
+  def image_params_2
+    params.permit(:id, :repository)
   end
 
 end

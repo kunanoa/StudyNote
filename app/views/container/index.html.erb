@@ -23,7 +23,7 @@
             <td><%= container.name %></td>
             <td><%= container.status %></td>
             <td><%= container.port %></td>
-            <td><%= container.repository %></td>
+            <td><%= "#{container.repository}:#{container.tag}" %></td>
             <% if container.status == "稼働中" %>
               <td><%= link_to "停止", container_run_path(id: container.id, status: container.status), 
                 data: { confirm: "#{container.id}（#{container.name}）\nコンテナを停止しますか？" } %></td>

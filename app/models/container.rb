@@ -5,10 +5,10 @@ class Container < ApplicationRecord
   # バリデーション処理
   validates :id, length: { is: 12 }, presence: true
   validates :status, format: { with: /\A(稼働中|停止|)\z/ }
-  validates :repository, length: { maximum: 15 }, format: {with: /\A([A-Za-z0-9._-]+|)\z/}
-  validates :tag, length: { maximum: 12 }, format: {with: /\A([A-Za-z0-9<>._-]+|)\z/}
+  validates :repository, length: { maximum: 15 }, format: {with: /\A([A-Za-z0-9]+[A-Za-z0-9_-]+[A-Za-z0-9]|)\z/}
+  validates :tag, length: { maximum: 12 }, format: {with: /\A([A-Za-z0-9]+[A-Za-z0-9_-]+[A-Za-z0-9]|)\z/}
   
-  def all_container_info()    
+  def all_container_info()
     ids = `docker ps -a --format "{{.ID}}"`.chomp.split("\n")
 
     all_container = []
@@ -25,9 +25,15 @@ class Container < ApplicationRecord
     @name = `docker ps -af "id=#{id}" --format '{{.Names}}'`.chomp
     @status = `docker ps -af "id=#{id}" --format '{{.Status}}'`.chomp
     @port = `docker ps -af "id=#{id}" --format '{{.Ports}}'`.chomp
-    @repository = `docker ps -af "id=#{id}" --format '{{.Image}}'`.chomp
-    @tag = "latest"
-
+    image_name = `docker ps -af "id=#{id}" --format '{{.Image}}'`.chomp
+    if image_name.include?(":")
+      @repository = image_name.split(":")[0]
+      @tag = image_name.split(":")[1]
+    else
+      @repository = image_name
+      @tag = "latest"
+    end
+  
     if @status.include?("Up")
       @status = "稼働中"
     else

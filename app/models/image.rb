@@ -3,11 +3,11 @@ class Image < ApplicationRecord
   attr_accessor :id, :repository, :tag, :created, :image_size
 
   # バリデーション処理
-  validates :id, length: { maximum: 12 }, format: {with: /\A([a-z0-9]+|)\z/}, presence: true
-  validates :repository, length: { maximum: 15 }, format: {with: /\A([A-Za-z0-9._-]+|)\z/}, presence: true
-  validates :tag, length: { maximum: 12 }, format: {with: /\A([A-Za-z0-9._-]+|)\z/}, presence: true
-  validates :image_size, length: { maximum: 10 }, format: {with: /\A([A-Za-z0-9.]+|)\z/}, presence: true
-  validates :created, length: { maximum: 18 }, format: {with: /\A([A-Za-z0-9 ]+|)\z/}, presence: true
+  validates :id, length: { maximum: 12 }, format: {with: /\A([a-z0-9]+|)\z/}
+  validates :repository, length: { maximum: 15 }, format: {with: /\A([A-Za-z0-9]+[A-Za-z0-9_-]+[A-Za-z0-9]|"<none>")\z/}
+  validates :tag, length: { maximum: 12 }, format: {with: /\A([A-Za-z0-9]+[A-Za-z0-9_-]+[A-Za-z0-9]|"<none>")\z/}
+  validates :image_size, length: { maximum: 10 }, format: {with: /\A([A-Za-z0-9.]+|)\z/}
+  validates :created, length: { maximum: 18 }, format: {with: /\A([A-Za-z0-9 ]+|)\z/}
 
   def all_image_info()
     count = `docker images -q`.chomp.split("\n").count
@@ -51,9 +51,13 @@ class Image < ApplicationRecord
 end
 
   # docker run --name #{name} -d -p #{server-port}:#{container-port} #{repogitory}:#{tag}
+  # docker run -d -it ubuntu:latest
 
-  # docker run -d -it ubuntu
-
+  # docker images --format "{{.Repository}} {{.Tag}}" | grep -v "<none>"
+  # docker images --format "{{.ID}} {{.Repository}} {{.Tag}}" | grep -v "<none>" | grep "^#{id}"
+  # docker images --format "{{.ID}} {{.Repository}} {{.Tag}}" | grep -v "<none>" | grep "^33bdf135ecb8"
+  # レポジトリかタグに<noneがついてるものは、作成、削除できなくすること！>
+  
   # オプション
   # 「-it --rm」
   # 「-d」…バックグラウンドで実行
