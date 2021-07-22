@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
-  get 'images/index'
+  get 'home/index'
   get 'container/index'
   get 'container/new'
   post 'container/create'
   get 'container/run'
   get 'container/delete'
-  get 'home/index'
   get 'images/index'
   get 'images/new'
+  post 'images/create'
   get 'images/delete'
   get 'images/delete_2'
 
