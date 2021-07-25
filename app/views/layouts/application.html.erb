@@ -18,11 +18,14 @@
 
         <nav class="navbar navbar-default navbar-fixed-top navbar-transparent">
           <div class="container">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
+
+            <% if user_signed_in? %>
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            <% end %>
 
             <div class="navbar-header">
               <%= link_to root_path do %>
@@ -30,22 +33,25 @@
               <% end %>
             </div>
 
-            <div id="navbar" class="collapse navbar-collapse">
-              <ul class="nav navbar-nav navbar-right">
-                <li class="text-center">
-                  <%= link_to "ホーム", home_index_path, class:"userList" %>
-                </li>
-                <li class="text-center">
-                  <%= link_to "コンテナ", container_index_path, class:"userList" %>
-                </li>
-                <li class="text-center">
-                <%= link_to "イメージ", images_index_path, class:"userList" %>
-                </li>
-                <li class="text-center">
-                  <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class:"userList" %>
-                </li>
-              </ul>
-            </div>
+            
+            <% if user_signed_in? %>
+              <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                  <li class="text-center">
+                    <%= link_to "ホーム", home_index_path, class:"userList" %>
+                  </li>
+                  <li class="text-center">
+                    <%= link_to "コンテナ", container_index_path, class:"userList" %>
+                  </li>
+                  <li class="text-center">
+                  <%= link_to "イメージ", images_index_path, class:"userList" %>
+                  </li>
+                  <li class="text-center">
+                    <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class:"userList" %>
+                  </li>
+                </ul>
+              </div>
+            <% end %>
           </div>
         </nav>
       </div>
